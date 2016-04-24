@@ -1,11 +1,13 @@
 {
-    "name": "apple"
-},
-{
-    "name": "orange"
-},
-{
-    "name": "peach"
+    "fruits": [   
+        {
+            "name": "apple"
+        },
+        {
+            "name": "orange"
+        },
+        {
+            "name": "peach"
+        }
+    ]
 }
-
-
