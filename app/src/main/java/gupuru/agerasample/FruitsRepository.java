@@ -1,39 +1,57 @@
 package gupuru.agerasample;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.agera.BaseObservable;
 import com.google.android.agera.Supplier;
 import com.google.android.agera.Updatable;
 
+import java.util.ArrayList;
+
 /**
- * Created by kohei on 2016/04/24.
+ * Repository
  */
-public class FruitsRepository extends BaseObservable implements Supplier<String>, Updatable {
+public class FruitsRepository extends BaseObservable implements Supplier<ArrayList<String>>, Updatable, FruitsGetApiRequest.FruitsCallback {
+
+    private ArrayList<String> fruitsNameArrayList;
 
     public FruitsRepository(){
 
     }
-    /**
-     * @return the most up to date known list of usernames
-     */
+
     @NonNull
     @Override
-    public String get() {
-        return "apple";
+    public ArrayList<String> get() {
+        return fruitsNameArrayList;
     }
 
     @Override
     public void update() {
-        Log.d("ここ", "FruitsRepository update");
-        dispatchUpdate();
+        //２番目
+        FruitsGetApiRequest fruitsGetApiRequest = new FruitsGetApiRequest(this);
+        fruitsGetApiRequest.run();
     }
 
     @Override
     protected void observableActivated() {
-        Log.d("ここ", "observableActivated");
+        //ここが最初によばれる
         update();
+    }
+
+    @Override
+    public void setError() {
+        //dispatchUpdateでactivity側に更新処理
+        dispatchUpdate();
+    }
+
+    @Override
+    public void setFruits(ArrayList<Fruits> fruitsArrayList) {
+        fruitsNameArrayList = new ArrayList<>();
+        for (Fruits fruits : fruitsArrayList) {
+            fruitsNameArrayList.add(fruits.getName());
+        }
+        //dispatchUpdateでactivity側に更新処理
+        dispatchUpdate();
     }
 
 }
